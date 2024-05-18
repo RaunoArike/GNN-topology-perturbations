@@ -9,6 +9,19 @@ from load_data import load_cora
 from parallel_edges import parallel_processing_edges, get_top_edges
 from gat import GAT, train, test
 from gcn import GCN, train, test
+from multiprocessing import Pool
+
+
+def get_explanations(data, indices, explainer):
+    res = {}
+
+    for i in indices:
+        print(f"here{i}")
+        explanation = explainer(data.x, data.edge_index, index=i)
+        edge_weight = explanation.edge_mask
+        res[i] = edge_weight
+
+    return res
 
 
 if __name__ == "__main__":    
@@ -19,14 +32,8 @@ if __name__ == "__main__":
         "num_heads": 8,
         "hidden_channels": 8
     }
-    # conf = {
-    #     "num_features": dataset.num_features,
-    #     "num_classes": dataset.num_classes,
-    #     "hidden_channels": 16
-    # }
 
     model = GAT(conf)
-    # model = GCN(conf)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.005, weight_decay=5e-4)
     loss_fn = torch.nn.CrossEntropyLoss()
 
@@ -36,16 +43,20 @@ if __name__ == "__main__":
         test_acc = test(model, data, data.test_mask)
         print(f'Epoch: {epoch:03d}, Loss: {loss:.4f}, Val: {val_acc:.4f}, Test: {test_acc:.4f}')
 
-    explainer = initialize_explainer(model, GNNExplainer(epochs=200), conf)
-    
+    explainer = initialize_explainer(model, GNNExplainer(epochs=100), conf)
+
     num_processes = 10
     index_ranges = np.array_split(range(data.num_nodes), num_processes)
-    freq = parallel_processing_edges(data, explainer, num_processes, index_ranges)
-    sorted_freq = sorted(freq.items(), key=lambda item: item[1], reverse=True)
 
-    with open("results.csv", "w", newline="") as file:
+    with Pool(processes=num_processes) as pool:
+        results = pool.starmap(get_explanations, [(data, indices, explainer) for indices in index_ranges])
+
+    merged_res = {}
+    for res in results:
+        merged_res.update(res)
+
+    with open("explanations.csv", "w", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow(["Edge", "Frequency"])
-        for edge, frequency in freq.items():
-            writer.writerow([f"{edge[0]}-{edge[1]}", frequency])
-    
+        writer.writerow(["Explained node", "Edge weights"])
+        for node, explanation in merged_res.items():
+            writer.writerow([node, explanation.tolist()])

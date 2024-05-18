@@ -6,7 +6,7 @@ def initialize_explainer(model, explainer_type, conf):
         model=model,
         algorithm=explainer_type,
         explanation_type='model',
-        node_mask_type='attributes',
+        node_mask_type='object',
         edge_mask_type='object',
         model_config=dict(
             mode='multiclass_classification',
