@@ -1,5 +1,5 @@
 import torch
-from torch_geometric.nn.conv import TAGConv
+from torch_geometric.nn.conv import GCNConv
 import torch.nn.functional as F
 
 
@@ -7,8 +7,8 @@ class GCN(torch.nn.Module):
     def __init__(self, conf):
         super().__init__()
         torch.manual_seed(1234567)
-        self.conv1 = TAGConv(conf["num_features"], conf["hidden_channels"])
-        self.conv2 = TAGConv(conf["hidden_channels"], conf["num_classes"])
+        self.conv1 = GCNConv(conf["num_features"], conf["hidden_channels"])
+        self.conv2 = GCNConv(conf["hidden_channels"], conf["num_classes"])
 
     def forward(self, x, edge_index):
         x = self.conv1(x, edge_index)

@@ -7,7 +7,7 @@ import csv
 from explainer import initialize_explainer
 from load_data import load_cora
 from parallel_edges import parallel_processing_edges, get_top_edges
-from gat import GAT, train, test
+# from gat import GAT, train, test
 from gcn import GCN, train, test
 from multiprocessing import Pool
 
@@ -29,12 +29,13 @@ if __name__ == "__main__":
     conf = {
         "num_features": dataset.num_features,
         "num_classes": dataset.num_classes,
-        "num_heads": 8,
-        "hidden_channels": 8
+        "hidden_channels": 16
     }
 
-    model = GAT(conf)
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.005, weight_decay=5e-4)
+    model = GCN(conf)
+    # optimizer = torch.optim.Adam(model.parameters(), lr=0.005, weight_decay=5e-4)
+    # loss_fn = torch.nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.01, weight_decay=5e-4)
     loss_fn = torch.nn.CrossEntropyLoss()
 
     for epoch in range(1, 101):
@@ -55,7 +56,7 @@ if __name__ == "__main__":
     for res in results:
         merged_res.update(res)
 
-    with open("explanations.csv", "w", newline="") as file:
+    with open("explanations_gcn.csv", "w", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(["Explained node", "Edge weights"])
         for node, explanation in merged_res.items():
