@@ -4,11 +4,11 @@ from torch_geometric.explain import GNNExplainer
 import numpy as np
 import csv
 
-from explainer import initialize_explainer
-from load_data import load_cora
-from parallel_edges import parallel_processing_edges, get_top_edges
-from gat import GAT, train, test
-from gcn import GCN, train, test
+from explanation_generation.explainer import initialize_explainer
+from explanation_generation.load_data import load_cora
+from deprecated.parallel_edges import parallel_processing_edges, get_top_edges
+from explanation_generation.gat import GAT, train, test
+from explanation_generation.gcn import GCN, train, test
 
 
 if __name__ == "__main__":    

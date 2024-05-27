@@ -4,11 +4,12 @@ from torch_geometric.explain import GNNExplainer
 import numpy as np
 import csv
 
-from explainer import initialize_explainer
-from load_data import load_cora
-from parallel_edges import parallel_processing_edges, get_top_edges
+from explanation_generation.explainer import initialize_explainer
+from explanation_generation.load_data import load_cora
+from deprecated.parallel_edges import parallel_processing_edges, get_top_edges
 # from gat import GAT, train, test
-from gcn import GCN, train, test
+# from gcn import GCN, train, test
+from explanation_generation.tagcn import TAGCN, train, test
 from multiprocessing import Pool
 
 
@@ -32,7 +33,7 @@ if __name__ == "__main__":
         "hidden_channels": 16
     }
 
-    model = GCN(conf)
+    model = TAGCN(conf)
     # optimizer = torch.optim.Adam(model.parameters(), lr=0.005, weight_decay=5e-4)
     # loss_fn = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.01, weight_decay=5e-4)
@@ -56,7 +57,7 @@ if __name__ == "__main__":
     for res in results:
         merged_res.update(res)
 
-    with open("explanations_gcn.csv", "w", newline="") as file:
+    with open("explanations_tagcn.csv", "w", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(["Explained node", "Edge weights"])
         for node, explanation in merged_res.items():
