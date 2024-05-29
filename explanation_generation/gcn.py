@@ -18,7 +18,7 @@ class GCN(torch.nn.Module):
         return x
         
 
-def train(model, data, optimizer, loss_fn):
+def train_GCN(model, data, optimizer, loss_fn):
       model.train()
       optimizer.zero_grad()
       out = model(data.x, data.edge_index)
@@ -28,7 +28,7 @@ def train(model, data, optimizer, loss_fn):
       return loss
 
 
-def test(model, data, mask):
+def test_GCN(model, data, mask):
     model.eval()
     out = model(data.x, data.edge_index)
     pred = out.argmax(dim=1)

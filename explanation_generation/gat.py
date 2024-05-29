@@ -19,7 +19,7 @@ class GAT(torch.nn.Module):
         return x
         
 
-def train(model, data, optimizer, loss_fn):
+def train_GAT(model, data, optimizer, loss_fn):
       model.train()
       optimizer.zero_grad()
       out = model(data.x, data.edge_index)
@@ -29,7 +29,7 @@ def train(model, data, optimizer, loss_fn):
       return loss
 
 
-def test(model, data, mask):
+def test_GAT(model, data, mask):
       model.eval()
       out = model(data.x, data.edge_index)
       out = F.softmax(out, dim=1)
