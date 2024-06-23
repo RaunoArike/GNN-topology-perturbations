@@ -19,10 +19,10 @@ def initialize_GNNExplainer(model, epochs=100):
     return explainer
 
 
-def initialize_IGExplainer(model):
+def initialize_CaptumExplainer(model, explainer_type):
     explainer = Explainer(
         model=model,
-        algorithm=CaptumExplainer('IntegratedGradients'),
+        algorithm=CaptumExplainer(explainer_type),
         explanation_type='model',
         node_mask_type='attributes',
         edge_mask_type='object',
