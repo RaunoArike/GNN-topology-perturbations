@@ -1,6 +1,6 @@
 # Beyond Spectral Graph Theory: An Explainability-Driven Approach to Analyzing the Stability of GNNs to Topology Perturbations
 
-This is the repository for a bachelor's thesis titled "Beyond Spectral Graph Theory: An Explainability-Driven Approach to Analyzing the Stability of GNNs to Topology Perturbations". The thesis has been written by Rauno Arike as part of the CSE3000 Research Project course. The paper that the code in this repository accompanies can be found at ...
+This is the repository for a bachelor's thesis titled "Beyond Spectral Graph Theory: An Explainability-Driven Approach to Analyzing the Stability of GNNs to Topology Perturbations". The thesis has been written by Rauno Arike as part of the CSE3000 Research Project course. The paper that the code in this repository accompanies can be found in the [TU Delft research repository](https://repository.tudelft.nl/record/uuid:bbc5eb7b-7b5b-40da-b6c9-df0b984b215f).
 
 ## Reproducing the results
 
